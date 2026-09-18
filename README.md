@@ -584,3 +584,13 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Deploy to Railway
+
+1. Create a Railway project from this GitHub repository and deploy the `main` branch.
+2. Add `LOVABLE_API_KEY` under the service variables if the AI interview features are required.
+3. Generate a Railway domain first and confirm `/client` loads successfully.
+4. Under **Settings > Networking**, add the custom domain.
+5. Add both DNS records Railway provides (the routing `CNAME`/`ALIAS` and ownership-verification `TXT` record) at the domain's DNS provider.
+
+Railway runs `npm run build`, starts the Nitro server with `npm start`, and supplies the listening `PORT` automatically. The client-facing questionnaire is available at `/client`.
