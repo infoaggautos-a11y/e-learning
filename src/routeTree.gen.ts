@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InterviewRouteImport } from './routes/interview'
+import { Route as ReviewRouteImport } from './routes/review'
+import { Route as SummaryRouteImport } from './routes/summary'
+import { Route as SectionIdRouteImport } from './routes/section.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InterviewRoute = InterviewRouteImport.update({
+  id: '/interview',
+  path: '/interview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SummaryRoute = SummaryRouteImport.update({
+  id: '/summary',
+  path: '/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SectionIdRoute = SectionIdRouteImport.update({
+  id: '/section/$id',
+  path: '/section/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/interview': typeof InterviewRoute
+  '/review': typeof ReviewRoute
+  '/summary': typeof SummaryRoute
+  '/section/$id': typeof SectionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/interview': typeof InterviewRoute
+  '/review': typeof ReviewRoute
+  '/summary': typeof SummaryRoute
+  '/section/$id': typeof SectionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/interview': typeof InterviewRoute
+  '/review': typeof ReviewRoute
+  '/summary': typeof SummaryRoute
+  '/section/$id': typeof SectionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/interview' | '/review' | '/summary' | '/section/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/interview' | '/review' | '/summary' | '/section/$id'
+  id: '__root__' | '/' | '/interview' | '/review' | '/summary' | '/section/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InterviewRoute: typeof InterviewRoute
+  ReviewRoute: typeof ReviewRoute
+  SummaryRoute: typeof SummaryRoute
+  SectionIdRoute: typeof SectionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/interview': {
+      id: '/interview'
+      path: '/interview'
+      fullPath: '/interview'
+      preLoaderRoute: typeof InterviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/summary': {
+      id: '/summary'
+      path: '/summary'
+      fullPath: '/summary'
+      preLoaderRoute: typeof SummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/section/$id': {
+      id: '/section/$id'
+      path: '/section/$id'
+      fullPath: '/section/$id'
+      preLoaderRoute: typeof SectionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InterviewRoute: InterviewRoute,
+  ReviewRoute: ReviewRoute,
+  SummaryRoute: SummaryRoute,
+  SectionIdRoute: SectionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
