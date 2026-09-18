@@ -20,7 +20,10 @@ export const Route = createFileRoute("/section/$id")({
   head: ({ loaderData }) => ({
     meta: [
       { title: `${loaderData?.section.number}. ${loaderData?.section.title} — Jetech Discovery` },
-      { name: "description", content: loaderData?.section.intro ?? "Discovery questionnaire section" },
+      {
+        name: "description",
+        content: loaderData?.section.intro ?? "Discovery questionnaire section",
+      },
       { property: "og:title", content: `${loaderData?.section.title} — Jetech Discovery` },
       { property: "og:description", content: loaderData?.section.intro ?? "" },
     ],
@@ -28,13 +31,32 @@ export const Route = createFileRoute("/section/$id")({
   component: SectionPage,
 });
 
-function QuestionField({ id, question, emphasis }: { id: string; question: string; emphasis?: boolean }) {
+function QuestionField({
+  id,
+  question,
+  emphasis,
+}: {
+  id: string;
+  question: string;
+  emphasis?: boolean;
+}) {
   const { state, setAnswer } = useQuestionnaire();
   const a = state.answers[id] ?? { text: "", status: "tbc" as const };
   return (
-    <div className={emphasis ? "card-elevated border-accent/50 bg-accent/5 p-4" : "border-b py-4 last:border-0"}>
-      {emphasis && <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-accent">Key question</p>}
-      <label htmlFor={id} className={emphasis ? "font-serif text-lg font-medium" : "text-sm font-medium"}>
+    <div
+      className={
+        emphasis ? "card-elevated border-accent/50 bg-accent/5 p-4" : "border-b py-4 last:border-0"
+      }
+    >
+      {emphasis && (
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-accent">
+          Key question
+        </p>
+      )}
+      <label
+        htmlFor={id}
+        className={emphasis ? "font-serif text-lg font-medium" : "text-sm font-medium"}
+      >
         {question}
       </label>
       <Textarea
@@ -66,17 +88,28 @@ function SectionPage() {
     const lines: string[] = [];
     const push = (q: string, id: string) => {
       const a = state.answers[id];
-      lines.push(`Q: ${q}\nA: ${a?.text.trim() ? `[${a.status}] ${a.text.trim()}` : "(unanswered)"}`);
+      lines.push(
+        `Q: ${q}\nA: ${a?.text.trim() ? `[${a.status}] ${a.text.trim()}` : "(unanswered)"}`,
+      );
     };
     if (section.keyQuestion) push(section.keyQuestion, keyQuestionId(section.id));
     section.questions.forEach((q, i) => push(q, questionId(section.id, i)));
-    followUps.forEach((f) => lines.push(`Follow-up: ${f.question}\nA: ${f.answer || "(unanswered)"}`));
+    followUps.forEach((f) =>
+      lines.push(`Follow-up: ${f.question}\nA: ${f.answer || "(unanswered)"}`),
+    );
 
     setLoading(true);
-    const res = await suggest({ data: { sectionTitle: section.title, sectionIntro: section.intro, qa: lines.join("\n\n") } });
+    const res = await suggest({
+      data: { sectionTitle: section.title, sectionIntro: section.intro, qa: lines.join("\n\n") },
+    });
     setLoading(false);
     if (!res.ok) return toast.error(res.error);
-    const items: FollowUp[] = res.followUps.map((f, i) => ({ id: `${Date.now()}-${i}`, question: f.question, why: f.why, answer: "" }));
+    const items: FollowUp[] = res.followUps.map((f, i) => ({
+      id: `${Date.now()}-${i}`,
+      question: f.question,
+      why: f.why,
+      answer: "",
+    }));
     setFollowUps(section.id, [...followUps, ...items]);
     toast.success(`${items.length} follow-up questions added`);
   }
@@ -92,7 +125,9 @@ function SectionPage() {
         {section.note && <p className="mt-2 text-sm italic text-accent">{section.note}</p>}
 
         <div className="mt-6 space-y-4">
-          {section.keyQuestion && <QuestionField id={keyQuestionId(section.id)} question={section.keyQuestion} emphasis />}
+          {section.keyQuestion && (
+            <QuestionField id={keyQuestionId(section.id)} question={section.keyQuestion} emphasis />
+          )}
           <div className="card-elevated px-4">
             {section.questions.map((q, i) => (
               <QuestionField key={i} id={questionId(section.id, i)} question={q} />
@@ -107,10 +142,15 @@ function SectionPage() {
                 <Sparkles className="h-4 w-4 text-accent" /> AI follow-up questions
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                The AI reads this section's answers and proposes probing questions to uncover hidden scope and cost.
+                The AI reads this section's answers and proposes probing questions to uncover hidden
+                scope and cost.
               </p>
             </div>
-            <Button onClick={askAi} disabled={loading} variant={followUps.length ? "outline" : "default"}>
+            <Button
+              onClick={askAi}
+              disabled={loading}
+              variant={followUps.length ? "outline" : "default"}
+            >
               {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}
               {followUps.length ? "Suggest more" : "Suggest follow-ups"}
             </Button>
@@ -154,8 +194,8 @@ function SectionPage() {
             </Button>
           ) : (
             <Button asChild>
-              <Link to="/review">
-                Review gaps & risks <ArrowRight />
+              <Link to="/handoff">
+                Prepare responses <ArrowRight />
               </Link>
             </Button>
           )}

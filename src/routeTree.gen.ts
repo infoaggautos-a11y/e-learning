@@ -10,14 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClientRouteImport } from './routes/client'
+import { Route as HandoffRouteImport } from './routes/handoff'
 import { Route as InterviewRouteImport } from './routes/interview'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as SummaryRouteImport } from './routes/summary'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as SectionIdRouteImport } from './routes/section.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientRoute = ClientRouteImport.update({
+  id: '/client',
+  path: '/client',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HandoffRoute = HandoffRouteImport.update({
+  id: '/handoff',
+  path: '/handoff',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InterviewRoute = InterviewRouteImport.update({
@@ -35,6 +48,11 @@ const SummaryRoute = SummaryRouteImport.update({
   path: '/summary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SectionIdRoute = SectionIdRouteImport.update({
   id: '/section/$id',
   path: '/section/$id',
@@ -43,39 +61,76 @@ const SectionIdRoute = SectionIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/client': typeof ClientRoute
+  '/handoff': typeof HandoffRoute
   '/interview': typeof InterviewRoute
   '/review': typeof ReviewRoute
   '/summary': typeof SummaryRoute
+  '/workspace': typeof WorkspaceRoute
   '/section/$id': typeof SectionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/client': typeof ClientRoute
+  '/handoff': typeof HandoffRoute
   '/interview': typeof InterviewRoute
   '/review': typeof ReviewRoute
   '/summary': typeof SummaryRoute
+  '/workspace': typeof WorkspaceRoute
   '/section/$id': typeof SectionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/client': typeof ClientRoute
+  '/handoff': typeof HandoffRoute
   '/interview': typeof InterviewRoute
   '/review': typeof ReviewRoute
   '/summary': typeof SummaryRoute
+  '/workspace': typeof WorkspaceRoute
   '/section/$id': typeof SectionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/interview' | '/review' | '/summary' | '/section/$id'
+  fullPaths:
+    | '/'
+    | '/client'
+    | '/handoff'
+    | '/interview'
+    | '/review'
+    | '/summary'
+    | '/workspace'
+    | '/section/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/interview' | '/review' | '/summary' | '/section/$id'
-  id: '__root__' | '/' | '/interview' | '/review' | '/summary' | '/section/$id'
+  to:
+    | '/'
+    | '/client'
+    | '/handoff'
+    | '/interview'
+    | '/review'
+    | '/summary'
+    | '/workspace'
+    | '/section/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/client'
+    | '/handoff'
+    | '/interview'
+    | '/review'
+    | '/summary'
+    | '/workspace'
+    | '/section/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClientRoute: typeof ClientRoute
+  HandoffRoute: typeof HandoffRoute
   InterviewRoute: typeof InterviewRoute
   ReviewRoute: typeof ReviewRoute
   SummaryRoute: typeof SummaryRoute
+  WorkspaceRoute: typeof WorkspaceRoute
   SectionIdRoute: typeof SectionIdRoute
 }
 
@@ -86,6 +141,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client': {
+      id: '/client'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof ClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/handoff': {
+      id: '/handoff'
+      path: '/handoff'
+      fullPath: '/handoff'
+      preLoaderRoute: typeof HandoffRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/interview': {
@@ -109,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/section/$id': {
       id: '/section/$id'
       path: '/section/$id'
@@ -121,9 +197,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClientRoute: ClientRoute,
+  HandoffRoute: HandoffRoute,
   InterviewRoute: InterviewRoute,
   ReviewRoute: ReviewRoute,
   SummaryRoute: SummaryRoute,
+  WorkspaceRoute: WorkspaceRoute,
   SectionIdRoute: SectionIdRoute,
 }
 export const routeTree = rootRouteImport
